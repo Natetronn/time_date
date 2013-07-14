@@ -1,10 +1,8 @@
 # Time Date - A Low Variables Type
 
-## Description
+Time Date is a Low Variables Type which provides a LowVars compatible jQuery UI time/date picker.
 
-Time Date is a Low Variables Type which provides a LV compatible date/time picker.
-
-## Install
+## Installation
 
  1. Copy `system/expressionengine/third_party/low_variables/types/time_date` folder into the low_variables types add-on folder.
 
@@ -12,6 +10,20 @@ Time Date is a Low Variables Type which provides a LV compatible date/time picke
 
 
  3. Turn on the type in Low Variables extension settings under "Variables Types".
+ 
+
+## Requirements
+
+[Low Variables](http://gotolow.com/addons/low-variables)
+
+jQuery for the Control Panel
+ 
+## Credit
+
+
+[@low](http://twitter.com/low)
+
+[Timepicker](http://trentrichardson.com/examples/timepicker/)
 
 
 
