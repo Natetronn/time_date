@@ -4,21 +4,34 @@
  * Time Date
  *
  * @package			Time Date
- * @version			1.0.0
+ * @version			1.1.0
  * @author			Nathan Doyle <@natetronn>
  * @copyright		Copyright (c) 2013 Cosmos Web Works, LLC
  * @license			MIT  http://opensource.org/licenses/mit-license.php
- * @link			http://github.com/Natetronn/timedate		
+ * @link			http://github.com/Natetronn/time_date		
  */
+
+/**
+ * < EE 2.6.0 backward compat - thx @low
+ */
+if ( ! function_exists('ee'))
+{
+	function ee()
+	{
+		static $EE;
+		if ( ! $EE) $EE = get_instance();
+		return $EE;
+	}
+}
 
 class Time_date extends Low_variables_type {
 
-	var $info = array(
+	public $info = array(
 		'name'		=> 'Time Date',
-		'version'	=> '1.0'
+		'version'	=> '1.1.0'
 	);
 
-	var $default_settings = array(
+	public $default_settings = array(
 		'multiple'	=> 'n',
 		'options'	=> '',
 		'separator'	=> 'newline'
@@ -58,13 +71,13 @@ class Time_date extends Low_variables_type {
 	*/
 	function display_input($var_id, $var_data, $var_settings)
 	{
-		$this->EE->cp->add_js_script(array('ui' => 'datepicker'));
-		$this->EE->cp->add_js_script(array('ui' => 'slider'));
+		ee()->cp->add_js_script(array('ui' => 'datepicker'));
+		ee()->cp->add_js_script(array('ui' => 'slider'));
 
 	
 		$input_id = 'time_date_'.$var_id;	
 		
-		$this->EE->javascript->output('						
+		ee()->javascript->output('						
 			$("#'.$input_id.'").datetimepicker({ampm: true, timeFormat: \'h:mm TT\', dateFormat: $.datepicker.W3C});
 		');
 		
@@ -88,6 +101,47 @@ class Time_date extends Low_variables_type {
 	function save_input($var_id, $var_data, $var_settings)
 	{
 		return $var_data;	// just save it as is
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	* Prep variable data for return
+	*
+	* @param	mixed	$tagdata		The template tagdata.
+	* @param	array	$row			Array containing the current variable details. Keys: variable_id, variable_name, variable_data, variable_label, variable_type and variable_settings.
+	* @return	string
+	*/
+
+	public function display_output($tagdata, $row)
+	{
+		$format = ee()->TMPL->fetch_param('format');
+
+		//Boolean of whether to use the current member’s timezone for localization (TRUE), or to use GMT (FALSE); or string of PHP timezone to use for the localization
+		$localizer = ee()->TMPL->fetch_param('localize');
+
+
+		if ( ! empty($format))
+		{
+
+			if (version_compare(APP_VER, '2.6', '>=')) 
+			{
+				$date = ee()->localize->string_to_timestamp($row['variable_data']);
+				$time_date = ee()->localize->format_date($format, $date, $localizer);
+			}
+			else 
+			{
+				$date = ee()->localize->convert_human_date_to_gmt($row['variable_data']);
+				$time_date = ee()->localize->decode_date($format, $date, $localizer);
+			}
+
+			return $time_date;
+		}
+		else
+		{
+			return $row['variable_data'];
+		}
+
 	}
 
 }
