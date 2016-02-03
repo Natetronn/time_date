@@ -1,3 +1,5 @@
+NOTE: This is add-on is no longer being supported and will not be updated for EE3. Fork it if you like.
+
 # Time Date - A Low Variables Type
 
 Time Date is a Low Variables Type which provides a LowVars compatible jQuery UI time/date picker.
